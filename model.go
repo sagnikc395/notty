@@ -3,6 +3,8 @@ package main
 import (
 	"log"
 
+	"github.com/charmbracelet/bubbles/textarea"
+	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
 )
 
@@ -27,6 +29,8 @@ type model struct {
 	// to click and see current note
 	currentNote Note
 	listIndex   int
+	textarea    textarea.Model
+	textinput   textinput.Model
 }
 
 func NewModel(store *Store) model {
@@ -35,9 +39,11 @@ func NewModel(store *Store) model {
 		log.Fatalf("unable to get notes: %v", err)
 	}
 	return model{
-		state: listView,
-		store: store,
-		notes: notes,
+		state:     listView,
+		store:     store,
+		notes:     notes,
+		textarea:  textarea.New(),
+		textinput: textinput.New(),
 	}
 }
 
@@ -49,6 +55,12 @@ func (m model) Init() tea.Cmd {
 
 // receives a message and returns an updated model and the command
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+	var cmd tea.Cmd
+	var cmds []tea.Cmd
+	m.textinput, cmd = m.textinput.Update(msg)
+	cmds = append(cmds, cmd)
+	m.textarea, cmd = m.textarea.Update(msg)
+	cmds = append(cmds, cmd)
 	//switch on key press by checking the type of message
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
@@ -81,5 +93,5 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 		}
 	}
-	return m, nil
+	return m, tea.Batch(cmds...)
 }
