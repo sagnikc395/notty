@@ -16,6 +16,20 @@ var (
 // the resultant tui would render.
 func (m model) View() string {
 	s := appNameStyle.Render("notty") + "\n\n"
+
+	if m.state == titleView {
+		s += "notty title:\n\n"
+		s += m.textinput.View() + "\n\n"
+		s += faintStyle.Render("enter - save, esc - discard")
+	}
+
+	//render our text area
+	if m.state == bodyView {
+		s += "Note:\n\n"
+		s += m.textarea.View() + "\n\n"
+		s += faintStyle.Render("ctrl+s - save, esc - discard")
+	}
+
 	if m.state == listView {
 		// iterate over the notes
 		for i, n := range m.notes {

@@ -96,6 +96,47 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.state = bodyView
 				//show the textarea
 			}
+		case titleView:
+			switch key {
+			case "enter":
+				title := m.textinput.Value()
+				if title != "" {
+					m.currentNote.Title = title
+					m.textarea.SetValue("")
+					m.textarea.Focus()
+					m.textarea.CursorEnd()
+
+					//change the state to body view
+					m.state = bodyView
+				}
+			case "esc":
+				m.state = listView
+			}
+
+		case bodyView:
+			switch key {
+			case "ctrl+s":
+				body := m.textarea.Value()
+				m.currentNote.Body = body
+
+				//store the data
+				var err error
+				if err := m.store.SaveNote(m.currentNote); err != nil {
+					//TODO: handle error better
+					return m, tea.Quit
+				}
+
+				m.notes, err = m.store.GetNotes()
+				if err != nil {
+					//todo: handler error
+					return m, tea.Quit
+				}
+				m.currentNote = Note{}
+				m.state = listView
+
+			case "esc":
+				m.state = listView
+			}
 
 		}
 	}
