@@ -95,7 +95,6 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.textarea.CursorEnd()
 				m.state = bodyView
 				//show the textarea
-
 			}
 
 		}

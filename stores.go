@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"time"
+	_ "github.com/mattn/go-sqlite3"
 )
 
 //store into a sqlite db

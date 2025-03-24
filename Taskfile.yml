@@ -12,5 +12,9 @@ tasks:
     silent: true
   run:
     cmds:
-      - go run ./main.go ./model.go ./view.go
+      - go run ./main.go ./model.go ./view.go ./stores.go
+    silent: false
+  build:
+    cmds:
+      - go build -o notty .
     silent: false
