@@ -74,6 +74,10 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				//keybinding for creating new update
 				//model update
 				//state change
+				m.textinput.SetValue("")
+				m.textinput.Focus()
+				//set the current note
+				m.currentNote = Note{}
 				m.state = titleView
 				//... show the input
 			case "up", "k":
@@ -86,6 +90,9 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				}
 			case "enter":
 				m.currentNote = m.notes[m.listIndex]
+				m.textarea.SetValue(m.currentNote.Body)
+				m.textarea.Focus()
+				m.textarea.CursorEnd()
 				m.state = bodyView
 				//show the textarea
 
