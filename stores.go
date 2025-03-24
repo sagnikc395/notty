@@ -14,6 +14,8 @@ type Note struct {
 }
 
 type Store struct {
+	// creating the direct store which would hold the sql db connection
+	// we could have further abstracted it and created it as a interface
 	conn *sql.DB
 }
 
@@ -38,6 +40,7 @@ func (s *Store) Init() error {
 }
 
 func (s *Store) GetNotes() ([]Note, error) {
+	// getting all the notes from the db
 	rows, err := s.conn.Query(`SELECT * FROM notes;`)
 
 	if err != nil {
@@ -56,6 +59,7 @@ func (s *Store) GetNotes() ([]Note, error) {
 
 func (s *Store) SaveNote(note Note) error {
 	if note.ID == 0 {
+		//create a unique note id
 		note.ID = time.Now().UTC().UnixNano()
 	}
 

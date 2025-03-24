@@ -1,6 +1,6 @@
 # https://taskfile.dev
 
-version: '3'
+version: "3"
 
 vars:
   GREETING: Hello, World!
@@ -12,7 +12,5 @@ tasks:
     silent: true
   run:
     cmds:
-      - go run ./main.go ./model.go ./views.go
+      - go run ./main.go ./model.go ./view.go
     silent: false
-
-
